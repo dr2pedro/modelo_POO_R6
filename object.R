@@ -22,15 +22,16 @@ object <- R6Class(
   private = list(
 
     ### por convenção os métodos privados são identificados com os dois pontos na frente
-    ### uma vez que é possível existir um mesmo tipo de escopo público com o mesmo nome.
+    ### uma vez que é possível existir um igual no escopo público com o mesmo nome.
     ..dataset = as.matrix(c(2,2,2,2),ncol=2)
 
   ),
 
   active = list(
-    ### O escopo ativo é o responsável pelos getters e pelos setters. Nele seremos capazes de acessar
-    ### dados no escopo privado (getter) e até alterar o dado no escopo privado. Por convenção ele
-    ### deve sempre ser definido como uma função (semelhante a sintaxe do JavaScript).
+    ### O escopo ativo é o responsável pelos getters e pelos setters. Nele seremos capazes 
+    ### de acessar dados no escopo privado (getter) e até alterar o dado no escopo 
+    ### privado (setter). Por convenção eles devem sempre ser definidos como 
+    ### funções (semelhante a sintaxe do JavaScript).
 
     dataset = function() {
       ###  é uma função que retorna o objeto do privado. Antes é possível fazer qualquer lógica de 
@@ -39,20 +40,30 @@ object <- R6Class(
       private$..dataset
     },
 
-      ### Esse é um exemplo de setter. Por padrão ela deve possuir um único argumento chamado value.
+      ### Esse é um exemplo de setter. Por convenção ela deve possuir um único 
+      ### argumento chamado value.
     extend_dataset = function(value) {
       
       ### o assert só aceita substituição por outras matrizes. 
       assert_is_a_matrix(value)
 
-      ### ele altera, mas não está retornando nada. Depois de um método setter, deve-se chamar o 
-      ### para se certificar da alteração.
+      ### ele altera, mas não está retornando nada. Depois de um método setter, 
+      ### deve-se chamar o getter para se certificar da alteração.
       private$..dataset = value
-    }
 
+      ### o escopo active pode por meio de funções definir variáveis acessíveis para o escopo
+      ### public por meio de getters. 
+    }),
+  public = list(
+      ### métodos/funções de trabalho para acesso público. 
+
+      initialize  = function (...){
+        ## método que faz pré-load do método $new comum em R6 object
+      }
+
+      finalize = function(...){
+        ## método que faz os procedimentos de off-load do $new. 
+      })
+    )
   )
-
-
-
-
 )
